@@ -101,7 +101,21 @@ function schema(tab) {
   if (tab === "gallery")
     return [
       { k: "design_name", l: "Design name", type: "text", req: true },
-      { k: "category", l: "Category", type: "text", req: true },
+      {
+        k: "category",
+        l: "Category",
+        type: "select",
+        req: true,
+        options: [
+          "Aari Work",
+          "Bridal Blouse",
+          "Designer Blouse",
+          "Embroidery",
+          "Pattern Blouse",
+          "Kids Dress",
+          "Other",
+        ],
+      },
       { k: "price", l: "Price (₹)", type: "number", req: true },
       { k: "description", l: "Description", type: "textarea" },
     ];
@@ -199,7 +213,7 @@ function editor(tab, row) {
       : tab === "reviews"
         ? "Customer Image"
         : "Service Image";
-  const html = `<div class="panel" style="margin-bottom:15px"><h2>${row ? "Edit" : "Add"} ${tab === "gallery" ? "Design" : tab === "reviews" ? "Review" : "Service"}</h2><div class="form">${fields.map((f) => `<div class="form-group ${f.type === "textarea" ? "full" : ""}"><label for="f_${f.k}">${f.l}</label>${f.type === "textarea" ? `<textarea id="f_${f.k}">${esc(row?.[f.k] ?? "")}</textarea>` : `<input id="f_${f.k}" type="${f.type}" min="${f.k === "rating" ? "1" : f.k === "price" ? "0" : ""}" max="${f.k === "rating" ? "5" : ""}" step="${f.k === "rating" ? "1" : "any"}" value="${esc(row?.[f.k] ?? "")}" ${f.req ? "required" : ""}>`}</div>`).join("")}${imageField ? `<div class="form-group full"><label for="imageFile">${imageLabel}${tab === "gallery" && !row ? " (required)" : ""}</label><input id="imageFile" type="file" accept="image/*"><span class="note">${row?.[tab === "gallery" ? "image_url" : tab === "reviews" ? "customer_image" : "image_url"] ? "Current image will remain if no replacement is selected." : `Upload to ${tab === "services" ? "service-images" : "gallery-images"}.`}</span></div>` : ""}<div id="editorStatus" class="editor-status" role="status" aria-live="polite"></div><div class="form-actions"><button type="button" class="btn" id="saveBtn">Save Changes</button><button type="button" class="small" id="cancelBtn">Cancel</button></div></div></div>`;
+  const html = `<div class="panel" style="margin-bottom:15px"><h2>${row ? "Edit" : "Add"} ${tab === "gallery" ? "Design" : tab === "reviews" ? "Review" : "Service"}</h2><div class="form">${fields.map((f) => `<div class="form-group ${f.type === "textarea" ? "full" : ""}"><label for="f_${f.k}">${f.l}</label>${f.type === "textarea" ? `<textarea id="f_${f.k}">${esc(row?.[f.k] ?? "")}</textarea>` : f.type === "select" ? `<select id="f_${f.k}" ${f.req ? "required" : ""}>${[...new Set([...(f.options || []), row?.[f.k]].filter(Boolean))].map((option) => `<option value="${esc(option)}" ${row?.[f.k] === option ? "selected" : ""}>${esc(option)}</option>`).join("")}</select>` : `<input id="f_${f.k}" type="${f.type}" min="${f.k === "rating" ? "1" : f.k === "price" ? "0" : ""}" max="${f.k === "rating" ? "5" : ""}" step="${f.k === "rating" ? "1" : "any"}" value="${esc(row?.[f.k] ?? "")}" ${f.req ? "required" : ""}>`}</div>`).join("")}${imageField ? `<div class="form-group full"><label for="imageFile">${imageLabel}${tab === "gallery" && !row ? " (required)" : ""}</label><input id="imageFile" type="file" accept="image/*"><span class="note">${row?.[tab === "gallery" ? "image_url" : tab === "reviews" ? "customer_image" : "image_url"] ? "Current image will remain if no replacement is selected." : `Upload to ${tab === "services" ? "service-images" : "gallery-images"}.`}</span></div>` : ""}<div id="editorStatus" class="editor-status" role="status" aria-live="polite"></div><div class="form-actions"><button type="button" class="btn" id="saveBtn">Save Changes</button><button type="button" class="small" id="cancelBtn">Cancel</button></div></div></div>`;
   $("#editor").innerHTML = html;
   $("#cancelBtn").onclick = () => {
     $("#editor").innerHTML = "";
