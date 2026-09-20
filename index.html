@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Rytham Fashions - blouse stitching, embroidery and ladies tailoring in Poraiyar."
+    />
+    <title>Rytham Fashions | Aari, Embroidery & Designer Blouses</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav">
+        <a class="brand" href="#home"
+          ><img
+            class="brand-logo"
+            src="assets/3.png"
+            alt="Rytham Fashions logo"
+          /><span
+            ><b id="brandName">Rytham Fashions</b
+            ><small
+              >Aari · Embroidery · Designer Blouses · Tailoring</small
+            ></span
+          ></a
+        ><button class="menu" id="menuBtn" aria-label="Open menu">☰</button>
+        <nav id="mainNav">
+          <a href="#home">Home</a><a href="#about">About Us</a
+          ><a href="#services">Services</a><a href="#gallery">Gallery</a
+          ><a href="#reviews">Reviews</a
+          ><a href="admin/index.html" target="_blank" rel="noopener">Admin</a
+          ><a class="nav-cta" id="navWhatsApp" target="_blank" rel="noopener"
+            >WhatsApp Us</a
+          >
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="hero" id="home">
+        <div class="hero-copy container">
+          <span class="eyebrow">WELCOME TO</span>
+          <h1>Rytham Fashions</h1>
+          <p class="hero-subtitle">
+            Aari | Embroidery | Designer Blouses | Tailoring
+          </p>
+          <p>
+            Unique designs crafted with care and creativity.<br />Make your
+            outfit as special as you are.
+          </p>
+          <div class="actions">
+            <a
+              class="btn primary"
+              id="heroWhatsApp"
+              target="_blank"
+              rel="noopener"
+              >◉ &nbsp; Enquire on WhatsApp</a
+            ><a class="btn secondary" href="#gallery">View Our Designs</a>
+          </div>
+        </div>
+        <div class="hero-script"><span>⌁</span></div>
+        <div class="hero-dots"><i></i><i class="active"></i><i></i></div>
+      </section>
+      <section class="section services-section" id="services">
+        <div class="container">
+          <div class="section-title">
+            <span class="floral">❧</span>
+            <h2>Our Services</h2>
+            <p>From traditional to trendy, we stitch your dreams.</p>
+          </div>
+          <div class="service-strip" id="servicesGrid">
+            <div class="loading">Loading services...</div>
+          </div>
+        </div>
+      </section>
+      <section class="section soft" id="about">
+        <div class="container about-grid">
+          <div class="about-photo">
+            <img
+              src="assets/about (1).jpg"
+              alt="Rytham Fashions blouse design"
+            />
+          </div>
+          <div class="about-copy">
+            <span class="floral">❧</span>
+            <h2>About Rytham Fashions</h2>
+            <p>
+              Rytham Fashions is a women-led fashion studio in Poraiyar,
+              specializing in Aari work, embroidery, designer blouses and
+              tailoring. We believe in creating designs that bring out your
+              unique style and personality. With attention to detail and a
+              passion for perfection, we turn your ideas into beautiful outfits.
+            </p>
+            <div class="stats">
+              <div><b>✿</b><span>Quality Work</span></div>
+              <div><b>♧</b><span>Affordable Price</span></div>
+              <div><b>♙</b><span>Custom Designs</span></div>
+              <div><b>♡</b><span>Customer Satisfaction</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="section gallery-section" id="gallery">
+        <div class="container">
+          <div class="section-title">
+            <span class="floral">❧</span>
+            <h2>Our Designs</h2>
+            <p>
+              Explore our latest blouse designs, aari work and tailoring
+              collections.
+            </p>
+          </div>
+          <div class="filters">
+            <select id="categoryFilter" aria-label="Filter by category">
+              <option value="All">All Categories</option></select
+            ><select id="priceFilter" aria-label="Filter by price">
+              <option value="all">All Prices</option>
+              <option value="under1000">Under ₹1,000</option>
+              <option value="1000to1500">₹1,000–₹1,500</option>
+              <option value="1500to2500">₹1,500–₹2,500</option>
+              <option value="over2500">₹2,500+</option></select
+            ><select id="sortPrice" aria-label="Sort gallery">
+              <option value="default">Default</option>
+              <option value="low">Price: Low to High</option>
+              <option value="high">Price: High to Low</option>
+            </select>
+          </div>
+          <div class="gallery" id="galleryGrid">
+            <div class="loading">Loading designs...</div>
+          </div>
+          <div class="center">
+            <button class="btn secondary" id="viewMoreDesigns" type="button">
+              View More Designs
+            </button>
+          </div>
+        </div>
+      </section>
+      <section class="section" id="reviews">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">CUSTOMER FEEDBACK</span>
+              <h2>Reviews</h2>
+            </div>
+          </div>
+          <div class="reviews" id="reviewsGrid">
+            <div class="loading">Loading reviews…</div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div class="container footer-grid">
+        <div class="footer-brand">
+          <img
+            class="footer-logo"
+            src="assets/5.png"
+            alt="Rytham Fashions logo"
+          />
+          <p>Stitching Dreams<br />into Reality</p>
+          <a
+            class="footer-map-link"
+            href="https://maps.app.goo.gl/B3PiJ8JTEbUQyAt57"
+            target="_blank"
+            rel="noopener"
+            ><img
+              src="assets/map.jpg"
+              alt="Find Rytham Fashions on Google Maps"
+            /><span
+              ><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Find
+              us on Google Maps</span
+            ></a
+          >
+        </div>
+        <div>
+          <h3>Quick Links</h3>
+          <a href="#home">Home</a><a href="#about">About Us</a
+          ><a href="#services">Services</a><a href="#gallery">Our Designs</a
+          ><a href="#reviews">Reviews</a
+          ><a href="admin/index.html" target="_blank" rel="noopener">Admin</a>
+        </div>
+        <div class="footer-contact">
+          <h3>Contact & Social</h3>
+          <a id="footerPhone"
+            ><i class="fa-solid fa-phone" aria-hidden="true"></i> Add phone in
+            Admin</a
+          ><a id="footerWhatsApp" target="_blank" rel="noopener"
+            ><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> WhatsApp
+            enquiry</a
+          ><a
+            id="footerInstagram"
+            href="https://www.instagram.com/rytham_fashions_porayar"
+            target="_blank"
+            rel="noopener"
+            ><i class="fa-brands fa-instagram" aria-hidden="true"></i>
+            Instagram</a
+          ><span id="footerAddress"
+            ><i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+            Kattucherry</span
+          >
+        </div>
+        <div class="footer-note">
+          <h3>Made For You</h3>
+          <p>
+            Thoughtful stitching, detailed embroidery and custom designs for
+            every special occasion.
+          </p>
+          <p class="footer-hours">
+            <i class="fa-regular fa-clock" aria-hidden="true"></i> Mon - Sat:
+            9:00 AM - 8:00 PM
+          </p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span
+          >© <span id="year"></span> Rytham Fashions. All Rights Reserved.</span
+        ><span class="footer-social-label">Follow Rytham Fashions</span>
+      </div>
+    </footer>
+    <a
+      class="float-wa"
+      id="floatingWhatsApp"
+      target="_blank"
+      rel="noopener"
+      aria-label="WhatsApp"
+      >◉</a
+    >
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

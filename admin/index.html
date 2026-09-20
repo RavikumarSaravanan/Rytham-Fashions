@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Rytham Fashions — Admin</title>
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <div id="loginView" class="login">
+      <div class="login-card">
+        <div class="logo">RF</div>
+        <h1>Admin Dashboard</h1>
+        <p>Manage Rytham Fashions website content.</p>
+        <form id="loginForm">
+          <input
+            id="email"
+            type="email"
+            placeholder="Admin email"
+            required
+          /><input
+            id="password"
+            type="password"
+            placeholder="Password"
+            required
+          /><button>Sign in</button>
+          <div id="loginError"></div>
+        </form>
+      </div>
+    </div>
+    <div id="appView" class="app hidden">
+      <aside>
+        <div class="side-brand">
+          <b>RF</b><span>Rytham Fashions<small>Admin</small></span>
+        </div>
+        <button data-tab="gallery" class="nav active">Our Designs</button
+        ><button data-tab="reviews" class="nav">Reviews</button
+        ><button id="logout" class="logout">Sign out</button>
+      </aside>
+      <main>
+        <div class="top">
+          <div>
+            <span>ADMIN</span>
+            <h1 id="pageTitle">Our Designs</h1>
+          </div>
+          <a href="../index.html" target="_blank">View website ↗</a>
+        </div>
+        <section id="gallery" class="tab"></section>
+        <section id="reviews" class="tab hidden"></section>
+      </main>
+    </div>
+    <div id="toast"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>
