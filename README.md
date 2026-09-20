@@ -1,41 +1,110 @@
-# Rytham Fashions — HTML + CSS + JavaScript + Supabase
+# Rytham Fashions
 
-Commercial website starter for Rytham Fashions using plain HTML/CSS/JavaScript and Supabase.
+Responsive boutique website and Supabase-powered admin dashboard for Rytham Fashions, a Poraiyar-based studio offering Aari work, embroidery, designer blouses, tailoring, and custom stitching.
 
-## Included
-- Responsive public website
-- Services, gallery, pricing and reviews loaded from Supabase
-- Gallery category and numeric price filtering
-- WhatsApp, Instagram, phone and Google Maps settings
-- Supabase Auth admin login
-- Admin CRUD for gallery, services, pricing and reviews
-- Two Storage buckets: `gallery-images` and `service-images`
-- Business settings editor
-- Enquiries table
+## Features
 
-## Setup
-1. Create or open the Supabase project.
-2. In Supabase SQL Editor, run [`supabase.sql`](supabase.sql). It creates all tables, RLS policies, the default settings row, and both public image buckets.
-3. In Supabase Authentication, create the owner admin user with email and password. No credentials are stored in this project.
-4. Confirm [`js/supabase.js`](js/supabase.js) contains the project URL and publishable/anon key only.
-5. Serve this folder with VS Code Live Server or `python -m http.server 5500 --directory Rytham-Fashions`.
-6. Open `index.html` for the public site and `admin/index.html` for the dashboard.
+- Responsive public website for desktop, tablet, and mobile screens.
+- Hero section with WhatsApp enquiry action.
+- Services, gallery, and customer reviews loaded from Supabase.
+- Gallery category, price-range, and price-sorting filters.
+- View-more pagination for gallery designs.
+- WhatsApp enquiry links for individual designs.
+- Contact details, Instagram, address, Google Maps, and opening-hours settings.
+- Supabase email/password authentication for the admin dashboard.
+- Admin management for gallery designs and customer reviews.
+- Gallery image uploads through Supabase Storage.
+- Service image uploads supported by the admin data model.
+- Customer enquiry records stored in Supabase.
 
-## Designs and reviews
+## Technology
 
-The authenticated Admin dashboard manages the `gallery` designs and `reviews` records. Gallery designs support image upload to the public `gallery-images` bucket, category, numeric Indian Rupee pricing, editing, deletion, and WhatsApp enquiry links. Reviews support customer name, 1-5 rating, text, optional customer image, editing, and deletion.
+- HTML5
+- CSS3
+- Vanilla JavaScript
+- Supabase Database, Auth, and Storage
+- Font Awesome icons
+- Google Fonts
 
-The public Designs section loads records from Supabase, shows eight cards initially, combines category/price/sort filters, and loads eight more matching cards with View More Designs. Apply the current `supabase.sql` setup before using customer-image uploads or the `reviews.updated_at` field.
+## Project Structure
 
-## Supabase features
-- Public reads: business settings, services, gallery, pricing and reviews.
-- Public inserts: enquiries only.
-- Authenticated admin CRUD: business settings, services, gallery, pricing, reviews and enquiries.
-- Storage buckets: `gallery-images` and `service-images`; uploaded images are stored as public URLs in PostgreSQL.
-- Gallery price/category filters and sorting run against Supabase-loaded data.
+```text
+Rytham-Fashions/
+├── admin/
+│   ├── admin.css
+│   ├── admin.js
+│   └── index.html
+├── assets/
+├── css/
+│   └── style.css
+├── js/
+│   ├── app.js
+│   └── supabase.js
+├── index.html
+├── supabase.sql
+└── README.md
+```
 
-## Important production security
-The included authenticated write policies allow any signed-in user to manage content. Before public commercial launch, replace them with policies that verify the owner admin identity or an `app_metadata` role. Never put a Supabase service-role/secret key in browser JavaScript.
+## Supabase Setup
 
-## Important content
-Phone/WhatsApp and business pricing/reviews should be entered with real information from the owner. Do not publish demo testimonials or placeholder contact numbers.
+1. Create a Supabase project.
+2. Open the Supabase SQL Editor.
+3. Run [`supabase.sql`](supabase.sql). It creates the application tables, RLS policies, starter data, and storage buckets.
+4. In Supabase Authentication, create an admin user with an email address and password.
+5. Confirm that [`js/supabase.js`](js/supabase.js) contains only the Supabase project URL and publishable key.
+6. Replace the starter contact details and content from the Admin dashboard.
+
+The SQL setup creates these tables:
+
+- `business_settings`
+- `services`
+- `gallery`
+- `pricing`
+- `reviews`
+- `enquiries`
+
+It also creates the public Storage buckets `gallery-images` and `service-images`.
+
+## Run Locally
+
+The project is a static website and does not require a build step. From the parent directory, run one of these commands:
+
+```bash
+python -m http.server 5500 --directory Rytham-Fashions
+```
+
+Or open the folder with VS Code and use Live Server.
+
+Then visit:
+
+- Public website: `http://localhost:5500/`
+- Admin dashboard: `http://localhost:5500/admin/`
+
+Opening the HTML files directly may prevent some browser features and Supabase requests from working correctly, so use a local web server during development.
+
+## Admin Dashboard
+
+Sign in with the Supabase Auth user created during setup. The dashboard currently provides:
+
+- Gallery design creation, editing, deletion, and image upload.
+- Gallery design category, price, and description fields.
+- Customer review creation, editing, and deletion.
+- Customer name, rating from 1 to 5, and review text fields.
+- Link back to the public website.
+
+Reviews do not require an image in the admin form. The database keeps the optional `customer_image` column for compatibility with existing records, but new reviews are managed without image uploads.
+
+## Security Notes
+
+- `js/supabase.js` must contain only a publishable/anon key. Never expose a Supabase service-role or secret key in browser code.
+- The included authenticated policies allow any authenticated Supabase user to manage content. Before a commercial launch, restrict write policies to the owner account or an approved admin role.
+- Replace starter contact details, sample services, and pricing before publishing.
+- Review and remove any demo or placeholder content before launch.
+
+## Deployment
+
+Deploy the `Rytham-Fashions` folder to any static hosting provider, such as GitHub Pages, Netlify, or Vercel static hosting. Configure the deployed site URL in Supabase Authentication if email authentication redirects require it.
+
+## Repository
+
+The project is hosted at [RavikumarSaravanan/Rytham-Fashions](https://github.com/RavikumarSaravanan/Rytham-Fashions).
