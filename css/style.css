@@ -1948,6 +1948,7 @@ footer {
     width: calc(100% - 28px);
   }
   .brand {
+    min-width: 0;
     max-width: calc(100% - 48px);
     gap: 8px;
   }
@@ -1976,5 +1977,36 @@ footer {
   }
   .footer-social-icons {
     flex: 0 0 auto;
+  }
+  .service-strip {
+    grid-template-columns: 1fr;
+  }
+  .service-strip .service-card,
+  .gallery-card,
+  .review,
+  .price-row {
+    width: min(100%, 360px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .service-strip .service-card,
+  .service-strip .service-card + .service-card,
+  .service-strip .service-card:nth-child(odd),
+  .service-strip .service-card:nth-child(4) {
+    border-left: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .service-strip .service-card:last-child {
+    border-bottom: 0;
+  }
+  .gallery-card,
+  .review {
+    text-align: center;
+  }
+  .gallery-info p {
+    display: block;
+  }
+  .design-enquiry {
+    justify-content: center;
   }
 }
