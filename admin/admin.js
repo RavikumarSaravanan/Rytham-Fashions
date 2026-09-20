@@ -164,6 +164,30 @@ function waUrl(row) {
   );
   return `https://wa.me/919626397113?text=${message}`;
 }
+function convertToWebp(file, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    const objectUrl = URL.createObjectURL(file);
+    image.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      const canvas = document.createElement("canvas");
+      canvas.width = image.naturalWidth;
+      canvas.height = image.naturalHeight;
+      canvas.getContext("2d").drawImage(image, 0, 0);
+      canvas.toBlob(
+        (blob) =>
+          blob ? resolve(blob) : reject(new Error("WebP conversion failed")),
+        "image/webp",
+        quality,
+      );
+    };
+    image.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error("This image format cannot be converted by the browser"));
+    };
+    image.src = objectUrl;
+  });
+}
 function editor(tab, row) {
   const fields = schema(tab);
   editing = row;
@@ -229,11 +253,16 @@ async function save(tab) {
       }
       if (file) {
         const bucket = tab === "services" ? "service-images" : "gallery-images";
-        const ext = file.name.split(".").pop().toLowerCase();
-        const path = `${Date.now()}-${crypto.randomUUID()}.${ext}`;
+        const uploadFile = tab === "gallery" ? await convertToWebp(file) : file;
+        const extension =
+          tab === "gallery" ? "webp" : file.name.split(".").pop().toLowerCase();
+        const path = `${Date.now()}-${crypto.randomUUID()}.${extension}`;
         const up = await supabaseClient.storage
           .from(bucket)
-          .upload(path, file, { upsert: false });
+          .upload(path, uploadFile, {
+            upsert: false,
+            contentType: tab === "gallery" ? "image/webp" : file.type,
+          });
         if (up.error) throw up.error;
         const url = supabaseClient.storage.from(bucket).getPublicUrl(path)
           .data.publicUrl;
