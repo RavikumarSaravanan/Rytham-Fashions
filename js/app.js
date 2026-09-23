@@ -13,7 +13,7 @@ let gallery = [],
 const categoryOptions = [
   "All",
   "Simple Aari Works (₹1,000–₹1,500)",
-  "Light Heavy Aari Works (₹1,500–₹2,500)",
+  "Semi heavy aari work (₹1,500–₹2,500)",
   "Bridal Aari Works (₹3,000–₹5,000)",
   "Bridal Aari Works (₹5,000–₹8,000)",
   "Heavy Aari Works (Above ₹8,000)",
@@ -159,6 +159,7 @@ function filteredGallery() {
     const price = Number(x.price || 0);
     if (priceFilter === "1000to1500") return price >= 1000 && price <= 1500;
     if (priceFilter === "1500to2500") return price > 1500 && price <= 2500;
+    if (priceFilter === "2500to3000") return price > 2500 && price <= 3000;
     if (priceFilter === "3000to5000") return price >= 3000 && price <= 5000;
     if (priceFilter === "5000to8000") return price > 5000 && price <= 8000;
     if (priceFilter === "over8000") return price > 8000;

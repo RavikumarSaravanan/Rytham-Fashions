@@ -108,7 +108,7 @@ function schema(tab) {
         req: true,
         options: [
           "Simple Aari Works (₹1,000–₹1,500)",
-          "Light Heavy Aari Works (₹1,500–₹2,500)",
+          "Semi heavy aari work (₹1,500–₹2,500)",
           "Bridal Aari Works (₹3,000–₹5,000)",
           "Bridal Aari Works (₹5,000–₹8,000)",
           "Heavy Aari Works (Above ₹8,000)",
