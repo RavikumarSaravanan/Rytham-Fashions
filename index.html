@@ -115,15 +115,20 @@
               <option value="All">All Categories</option></select
             ><select id="priceFilter" aria-label="Filter by price">
               <option value="all">All Prices</option>
-              <option value="under1000">Under ₹1,000</option>
               <option value="1000to1500">₹1,000–₹1,500</option>
               <option value="1500to2500">₹1,500–₹2,500</option>
-              <option value="over2500">₹2,500+</option></select
+              <option value="3000to5000">₹3,000–₹5,000</option>
+              <option value="5000to8000">₹5,000–₹8,000</option>
+              <option value="over8000">Above ₹8,000</option>
+              <option value="onrequest">Price on request</option></select
             ><select id="sortPrice" aria-label="Sort gallery">
               <option value="default">Default</option>
               <option value="low">Price: Low to High</option>
               <option value="high">Price: High to Low</option>
             </select>
+            <button class="btn secondary share-filters" id="shareFilters" type="button">
+              Share Filters
+            </button>
           </div>
           <div class="gallery" id="galleryGrid">
             <div class="loading">Loading designs...</div>

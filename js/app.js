@@ -10,6 +10,16 @@ const esc = (v) =>
 let gallery = [],
   activeCategory = "All",
   visibleLimit = 8;
+const categoryOptions = [
+  "All",
+  "Simple Aari Works (₹1,000–₹1,500)",
+  "Light Heavy Aari Works (₹1,500–₹2,500)",
+  "Bridal Aari Works (₹3,000–₹5,000)",
+  "Bridal Aari Works (₹5,000–₹8,000)",
+  "Heavy Aari Works (Above ₹8,000)",
+  "Machine Embroidery Work (Price on request)",
+  "Pattern Blouse (Price on request)",
+];
 const settingsDefault = {
   business_name: "Rytham Fashions",
   phone: "+91 9626397113",
@@ -19,38 +29,6 @@ const settingsDefault = {
   google_maps: "https://maps.app.goo.gl/B3PiJ8JTEbUQyAt57",
 };
 let enquiryNumber = settingsDefault.whatsapp;
-const starterServices = [
-  {
-    name: "Aari & Embroidery",
-    description: "Intricate designs, beautifully crafted",
-    image_url: "assets/gallery-1.jpg",
-  },
-  {
-    name: "Blouse Stitching",
-    description: "All types of pattern blouses",
-    image_url: "assets/gallery-2.jpg",
-  },
-  {
-    name: "Bridal Blouse",
-    description: "Make your special day more beautiful",
-    image_url: "assets/gallery-3.jpg",
-  },
-  {
-    name: "Ladies Tailoring",
-    description: "Sarees, dresses and custom stitching",
-    image_url: "assets/gallery-4.jpg",
-  },
-  {
-    name: "Alterations",
-    description: "Perfect fit, every time",
-    image_url: "assets/gallery-5.jpg",
-  },
-  {
-    name: "Kids Dress",
-    description: "Comfortable custom outfits for little ones",
-    image_url: "assets/gallery-6.jpg",
-  },
-];
 function waUrl(number) {
   const n = (number || "").replace(/\D/g, "");
   const message = encodeURIComponent(
@@ -80,9 +58,11 @@ async function load() {
   ]);
   const settings = { ...settingsDefault, ...(s.data || {}) };
   applySettings(settings);
-  renderServices(sv.data?.length ? sv.data : starterServices);
+  renderServices(sv.data || []);
   gallery = g.data || [];
+  restoreFilters();
   renderCategories();
+  $("#categoryFilter").value = activeCategory;
   renderGallery();
   await loadReviews();
   supabaseClient
@@ -121,7 +101,9 @@ function renderServices(items) {
 }
 function designWaUrl(x) {
   const price = Number(x.price || 0);
-  const shownPrice = `₹${price.toLocaleString("en-IN")}`;
+  const shownPrice = x.price_on_request
+    ? "Price on request"
+    : `₹${price.toLocaleString("en-IN")}`;
   const message = encodeURIComponent(
     `Hello Rytham Fashions, I would like to enquire about this design.\n\nDesign: ${x.design_name || "Design"}\nCategory: ${x.category || "Not specified"}\nPrice: ${shownPrice}\n\nPlease share more details.`,
   );
@@ -129,23 +111,7 @@ function designWaUrl(x) {
   return n ? `https://wa.me/${n}?text=${message}` : "#";
 }
 function renderCategories() {
-  const standard = [
-    "All",
-    "Aari Work",
-    "Bridal Blouse",
-    "Designer Blouse",
-    "Embroidery",
-    "Pattern Blouse",
-    "Kids Dress",
-    "Other",
-  ];
-  const categories = [
-    ...new Set([
-      ...standard,
-      ...gallery.map((x) => x.category).filter(Boolean),
-    ]),
-  ];
-  $("#categoryFilter").innerHTML = categories
+  $("#categoryFilter").innerHTML = categoryOptions
     .map(
       (c) =>
         `<option value="${esc(c)}">${c === "All" ? "All Categories" : esc(c)}</option>`,
@@ -159,10 +125,12 @@ function filteredGallery() {
   const priceFilter = $("#priceFilter").value;
   items = items.filter((x) => {
     const price = Number(x.price || 0);
-    if (priceFilter === "under1000") return price < 1000;
     if (priceFilter === "1000to1500") return price >= 1000 && price <= 1500;
     if (priceFilter === "1500to2500") return price > 1500 && price <= 2500;
-    if (priceFilter === "over2500") return price > 2500;
+    if (priceFilter === "3000to5000") return price >= 3000 && price <= 5000;
+    if (priceFilter === "5000to8000") return price > 5000 && price <= 8000;
+    if (priceFilter === "over8000") return price > 8000;
+    if (priceFilter === "onrequest") return Boolean(x.price_on_request);
     return true;
   });
   const sort = $("#sortPrice").value;
@@ -175,17 +143,49 @@ function filteredGallery() {
 function renderGallery() {
   const items = filteredGallery();
   const shown = items.slice(0, visibleLimit);
+  const displayPrice = (x) =>
+    x.price_on_request
+      ? "Price on request"
+      : `₹${Number(x.price || 0).toLocaleString("en-IN")}`;
   $("#galleryGrid").innerHTML = shown.length
     ? shown
         .map(
           (x) =>
-            `<article class="gallery-card"><div class="gallery-img">${x.image_url ? `<img src="${esc(x.image_url)}" alt="${esc(x.design_name)}">` : '<div class="empty">Image unavailable</div>'}<span class="price-tag">₹${Number(x.price || 0).toLocaleString("en-IN")}</span></div><div class="gallery-info"><h3>${esc(x.design_name)}</h3><span class="muted design-price">₹${Number(x.price || 0).toLocaleString("en-IN")}</span><p class="muted">${esc(x.description)}</p><a class="design-enquiry" href="${designWaUrl(x)}" target="_blank" rel="noopener" onclick="if(!enquiryNumber){event.preventDefault();alert('WhatsApp is not configured yet. Please contact the studio directly.');}"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Enquire on WhatsApp</a></div></article>`,
+            `<article class="gallery-card"><div class="gallery-img">${x.image_url ? `<img src="${esc(x.image_url)}" alt="${esc(x.design_name)}">` : '<div class="empty">Image unavailable</div>'}<span class="price-tag">${displayPrice(x)}</span></div><div class="gallery-info"><h3>${esc(x.design_name)}</h3><span class="muted design-price">${displayPrice(x)}</span><p class="muted">${esc(x.description)}</p><a class="design-enquiry" href="${designWaUrl(x)}" target="_blank" rel="noopener" onclick="if(!enquiryNumber){event.preventDefault();alert('WhatsApp is not configured yet. Please contact the studio directly.');}"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Enquire on WhatsApp</a></div></article>`,
         )
         .join("")
     : '<div class="empty">No designs match your selected filters.</div>';
   const more = $("#viewMoreDesigns");
   more.hidden = items.length <= visibleLimit;
   more.disabled = items.length <= visibleLimit;
+}
+function updateFilterUrl() {
+  const params = new URLSearchParams();
+  if (activeCategory !== "All") params.set("category", activeCategory);
+  if ($("#priceFilter").value !== "all")
+    params.set("price", $("#priceFilter").value);
+  const query = params.toString();
+  history.replaceState(null, "", `${location.pathname}${query ? `?${query}` : ""}${location.hash}`);
+}
+function restoreFilters() {
+  const params = new URLSearchParams(location.search);
+  activeCategory = params.get("category") || "All";
+  const price = params.get("price");
+  if (price && $("#priceFilter").querySelector(`option[value="${CSS.escape(price)}"]`))
+    $("#priceFilter").value = price;
+}
+async function shareFilters() {
+  updateFilterUrl();
+  const url = location.href;
+  const label = activeCategory === "All" ? "these designs" : `${activeCategory} designs`;
+  try {
+    if (navigator.share)
+      await navigator.share({ title: "Rytham Fashions designs", text: `Please view ${label}.`, url });
+    else await navigator.clipboard.writeText(url);
+    alert(navigator.share ? "Filter link shared." : "Filter link copied.");
+  } catch (error) {
+    if (error.name !== "AbortError") alert(`Copy this link to share the selected filters: ${url}`);
+  }
 }
 function renderReviews(items) {
   $("#reviewsGrid").innerHTML = items.length
@@ -200,10 +200,12 @@ function renderReviews(items) {
 $("#categoryFilter").onchange = () => {
   activeCategory = $("#categoryFilter").value;
   visibleLimit = 8;
+  updateFilterUrl();
   renderGallery();
 };
 $("#priceFilter").onchange = () => {
   visibleLimit = 8;
+  updateFilterUrl();
   renderGallery();
 };
 $("#sortPrice").onchange = () => {
@@ -214,6 +216,7 @@ $("#viewMoreDesigns").onclick = () => {
   visibleLimit += 8;
   renderGallery();
 };
+$("#shareFilters").onclick = shareFilters;
 $("#menuBtn").onclick = () => $("#mainNav").classList.toggle("open");
 $("#year").textContent = new Date().getFullYear();
 load().catch((e) => {

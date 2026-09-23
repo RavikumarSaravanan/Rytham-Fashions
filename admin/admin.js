@@ -107,16 +107,17 @@ function schema(tab) {
         type: "select",
         req: true,
         options: [
-          "Aari Work",
-          "Bridal Blouse",
-          "Designer Blouse",
-          "Embroidery",
-          "Pattern Blouse",
-          "Kids Dress",
-          "Other",
+          "Simple Aari Works (₹1,000–₹1,500)",
+          "Light Heavy Aari Works (₹1,500–₹2,500)",
+          "Bridal Aari Works (₹3,000–₹5,000)",
+          "Bridal Aari Works (₹5,000–₹8,000)",
+          "Heavy Aari Works (Above ₹8,000)",
+          "Machine Embroidery Work (Price on request)",
+          "Pattern Blouse (Price on request)",
         ],
       },
-      { k: "price", l: "Price (₹)", type: "number", req: true },
+      { k: "price", l: "Price (₹)", type: "number" },
+      { k: "price_on_request", l: "Price on request", type: "checkbox" },
       { k: "description", l: "Description", type: "textarea" },
     ];
   if (tab === "services")
@@ -158,8 +159,10 @@ async function crud(tab) {
     tab === "gallery"
       ? `<a class="small whatsapp-action" href="${waUrl(row)}" target="_blank" rel="noopener">WhatsApp enquiry</a>`
       : "";
+  const cellValue = (row, field) =>
+    field.type === "checkbox" ? (row[field.k] ? "Yes" : "No") : row[field.k];
   $("#" + tab).innerHTML =
-    `<div class="panel"><div class="toolbar"><div><h2>${meta.title}</h2><div class="note">${tab === "gallery" ? "Add, edit, delete, upload images, and forward design enquiries to WhatsApp." : "Add, edit, or delete customer reviews."}</div></div><button type="button" class="btn" data-add-item="${tab}">+ Add ${tab === "gallery" ? "Design" : "Review"}</button></div><div id="editor"></div><div style="overflow:auto"><table class="table"><thead><tr>${imageHead}${fields.map((f) => `<th>${f.l}</th>`).join("")}<th>Actions</th></tr></thead><tbody>${(data || []).map((row) => `<tr>${imageCell(row)}${fields.map((f) => `<td>${esc(row[f.k])}</td>`).join("")}<td><div class="actions">${enquiry(row)}<button type="button" class="small" data-edit="${row.id}">Edit</button><button type="button" class="small danger" data-delete="${row.id}">Delete</button></div></td></tr>`).join("")}</tbody></table></div></div>`;
+    `<div class="panel"><div class="toolbar"><div><h2>${meta.title}</h2><div class="note">${tab === "gallery" ? "Add, edit, delete, upload images, and forward design enquiries to WhatsApp." : "Add, edit, or delete customer reviews."}</div></div><button type="button" class="btn" data-add-item="${tab}">+ Add ${tab === "gallery" ? "Design" : "Review"}</button></div><div id="editor"></div><div style="overflow:auto"><table class="table"><thead><tr>${imageHead}${fields.map((f) => `<th>${f.l}</th>`).join("")}<th>Actions</th></tr></thead><tbody>${(data || []).map((row) => `<tr>${imageCell(row)}${fields.map((f) => `<td>${esc(cellValue(row, f))}</td>`).join("")}<td><div class="actions">${enquiry(row)}<button type="button" class="small" data-edit="${row.id}">Edit</button><button type="button" class="small danger" data-delete="${row.id}">Delete</button></div></td></tr>`).join("")}</tbody></table></div></div>`;
   document.querySelectorAll("[data-edit]").forEach(
     (b) =>
       (b.onclick = () =>
@@ -213,7 +216,11 @@ function editor(tab, row) {
       : tab === "reviews"
         ? "Customer Image"
         : "Service Image";
-  const html = `<div class="panel" style="margin-bottom:15px"><h2>${row ? "Edit" : "Add"} ${tab === "gallery" ? "Design" : tab === "reviews" ? "Review" : "Service"}</h2><div class="form">${fields.map((f) => `<div class="form-group ${f.type === "textarea" ? "full" : ""}"><label for="f_${f.k}">${f.l}</label>${f.type === "textarea" ? `<textarea id="f_${f.k}">${esc(row?.[f.k] ?? "")}</textarea>` : f.type === "select" ? `<select id="f_${f.k}" ${f.req ? "required" : ""}>${[...new Set([...(f.options || []), row?.[f.k]].filter(Boolean))].map((option) => `<option value="${esc(option)}" ${row?.[f.k] === option ? "selected" : ""}>${esc(option)}</option>`).join("")}</select>` : `<input id="f_${f.k}" type="${f.type}" min="${f.k === "rating" ? "1" : f.k === "price" ? "0" : ""}" max="${f.k === "rating" ? "5" : ""}" step="${f.k === "rating" ? "1" : "any"}" value="${esc(row?.[f.k] ?? "")}" ${f.req ? "required" : ""}>`}</div>`).join("")}${imageField ? `<div class="form-group full"><label for="imageFile">${imageLabel}${tab === "gallery" && !row ? " (required)" : ""}</label><input id="imageFile" type="file" accept="image/*"><span class="note">${row?.[tab === "gallery" ? "image_url" : tab === "reviews" ? "customer_image" : "image_url"] ? "Current image will remain if no replacement is selected." : `Upload to ${tab === "services" ? "service-images" : "gallery-images"}.`}</span></div>` : ""}<div id="editorStatus" class="editor-status" role="status" aria-live="polite"></div><div class="form-actions"><button type="button" class="btn" id="saveBtn">Save Changes</button><button type="button" class="small" id="cancelBtn">Cancel</button></div></div></div>`;
+  const galleryUrlField =
+    tab === "gallery"
+      ? `<div class="form-group full"><label for="imageUrl">Online image URL</label><input id="imageUrl" type="url" value="${esc(row?.image_url ?? "")}" placeholder="https://images.unsplash.com/..."><span class="note">Use an Unsplash image URL, or select a file below.</span></div>`
+      : "";
+  const html = `<div class="panel" style="margin-bottom:15px"><h2>${row ? "Edit" : "Add"} ${tab === "gallery" ? "Design" : tab === "reviews" ? "Review" : "Service"}</h2><div class="form">${fields.map((f) => `<div class="form-group ${f.type === "textarea" ? "full" : ""}"><label for="f_${f.k}">${f.l}</label>${f.type === "textarea" ? `<textarea id="f_${f.k}">${esc(row?.[f.k] ?? "")}</textarea>` : f.type === "select" ? `<select id="f_${f.k}" ${f.req ? "required" : ""}>${[...new Set([...(f.options || []), row?.[f.k]].filter(Boolean))].map((option) => `<option value="${esc(option)}" ${row?.[f.k] === option ? "selected" : ""}>${esc(option)}</option>`).join("")}</select>` : f.type === "checkbox" ? `<input id="f_${f.k}" type="checkbox" ${row?.[f.k] ? "checked" : ""}>` : `<input id="f_${f.k}" type="${f.type}" min="${f.k === "rating" ? "1" : f.k === "price" ? "0" : ""}" max="${f.k === "rating" ? "5" : ""}" step="${f.k === "rating" ? "1" : "any"}" value="${esc(row?.[f.k] ?? "")}" ${f.req ? "required" : ""}>`}</div>`).join("")}${galleryUrlField}${imageField ? `<div class="form-group full"><label for="imageFile">${imageLabel}${tab === "gallery" && !row ? " (required)" : ""}</label><input id="imageFile" type="file" accept="image/*"><span class="note">${row?.[tab === "gallery" ? "image_url" : tab === "reviews" ? "customer_image" : "image_url"] ? "Current image will remain if no replacement is selected." : `Upload to ${tab === "services" ? "service-images" : "gallery-images"}.`}</span></div>` : ""}<div id="editorStatus" class="editor-status" role="status" aria-live="polite"></div><div class="form-actions"><button type="button" class="btn" id="saveBtn">Save Changes</button><button type="button" class="small" id="cancelBtn">Cancel</button></div></div></div>`;
   $("#editor").innerHTML = html;
   $("#cancelBtn").onclick = () => {
     $("#editor").innerHTML = "";
@@ -236,7 +243,7 @@ async function save(tab) {
       payload = {};
     for (const f of fields) {
       const input = $(`#f_${f.k}`),
-        v = input.value.trim();
+        v = f.type === "checkbox" ? input.checked : input.value.trim();
       if (f.req && !v) {
         toast(`${f.l} is required`);
         if (status) status.textContent = `${f.l} is required`;
@@ -260,11 +267,13 @@ async function save(tab) {
     }
     if (tab === "gallery" || tab === "reviews" || tab === "services") {
       const file = $("#imageFile")?.files[0];
-      if (tab === "gallery" && !editing && !file) {
+      const imageUrl = tab === "gallery" ? $("#imageUrl")?.value.trim() : "";
+      if (tab === "gallery" && !editing && !file && !imageUrl) {
         toast("Design image is required");
         if (status) status.textContent = "Design image is required";
         return;
       }
+      if (tab === "gallery" && imageUrl) payload.image_url = imageUrl;
       if (file) {
         const bucket = tab === "services" ? "service-images" : "gallery-images";
         const uploadFile = tab === "gallery" ? await convertToWebp(file) : file;
