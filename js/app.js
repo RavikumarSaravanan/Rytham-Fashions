@@ -57,7 +57,7 @@ const settingsDefault = {
   phone: "+91 9626397113",
   whatsapp: "+91 9626397113",
   instagram: "https://www.instagram.com/rytham_fashions_porayar",
-  address: "JP Kavya Complex, Veerapillai St, Kattucherry",
+  address: "JP Kavya Complex, Veerapillai St, Porayar",
   google_maps: "https://maps.app.goo.gl/B3PiJ8JTEbUQyAt57",
 };
 let enquiryNumber = settingsDefault.whatsapp;

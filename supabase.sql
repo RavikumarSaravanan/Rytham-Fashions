@@ -7,7 +7,7 @@ create table if not exists business_settings (
   phone text default '',
   whatsapp text default '',
   instagram text default 'https://www.instagram.com/rytham_fashions_porayar',
-  address text default 'JP Kavya Complex, Veerapillai St, Kattucherry',
+  address text default 'JP Kavya Complex, Veerapillai St, Porayar',
   google_maps text default 'https://maps.app.goo.gl/B3PiJ8JTEbUqAt57',
   opening_hours text default '',
   updated_at timestamptz not null default now()
