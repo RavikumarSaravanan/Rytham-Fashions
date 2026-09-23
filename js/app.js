@@ -109,7 +109,7 @@ async function load() {
 function applySettings(s) {
   $("#brandName").textContent = s.business_name || "Rytham Fashions";
   $("#footerAddress").innerHTML =
-    `<i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${esc(s.address || "Kattucherry")}`;
+    `<i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${esc(s.address || settingsDefault.address)}`;
   $("#footerPhone").innerHTML =
     `<i class="fa-solid fa-phone" aria-hidden="true"></i> ${esc(s.phone || settingsDefault.phone)}`;
   enquiryNumber = s.whatsapp || settingsDefault.whatsapp;

@@ -104,6 +104,10 @@ insert into business_settings (business_name)
 select 'Rytham Fashions'
 where not exists (select 1 from business_settings);
 
+update business_settings
+set address = 'JP Kavya Complex, Veerapillai St, Porayar'
+where address is null or address = '' or address = 'JP Kavya Complex, Veerapillai St, Kattucherry';
+
 -- Remove the original sample records without touching owner-uploaded records.
 delete from services
 where image_url in ('assets/gallery-1.jpg', 'assets/gallery-2.jpg', 'assets/gallery-3.jpg', 'assets/gallery-4.jpg', 'assets/gallery-5.jpg', 'assets/gallery-6.jpg');
