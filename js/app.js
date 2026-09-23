@@ -20,6 +20,38 @@ const categoryOptions = [
   "Machine Embroidery Work (Price on request)",
   "Pattern Blouse (Price on request)",
 ];
+const starterServices = [
+  {
+    name: "Aari & Embroidery",
+    description: "Intricate designs, beautifully crafted",
+    image_url: "assets/gallery-1.jpg",
+  },
+  {
+    name: "Blouse Stitching",
+    description: "All types of pattern blouses",
+    image_url: "assets/gallery-2.jpg",
+  },
+  {
+    name: "Bridal Blouse",
+    description: "Make your special day more beautiful",
+    image_url: "assets/gallery-3.jpg",
+  },
+  {
+    name: "Ladies Tailoring",
+    description: "Sarees, dresses and custom stitching",
+    image_url: "assets/gallery-4.jpg",
+  },
+  {
+    name: "Alterations",
+    description: "Perfect fit, every time",
+    image_url: "assets/gallery-5.jpg",
+  },
+  {
+    name: "Kids Dress",
+    description: "Comfortable custom outfits for little ones",
+    image_url: "assets/gallery-6.jpg",
+  },
+];
 const settingsDefault = {
   business_name: "Rytham Fashions",
   phone: "+91 9626397113",
@@ -58,7 +90,7 @@ async function load() {
   ]);
   const settings = { ...settingsDefault, ...(s.data || {}) };
   applySettings(settings);
-  renderServices(sv.data || []);
+  renderServices(sv.data?.length ? sv.data : starterServices);
   gallery = g.data || [];
   restoreFilters();
   renderCategories();
